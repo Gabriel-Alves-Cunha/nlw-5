@@ -1,10 +1,14 @@
 import { GetStaticProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { api } from "../services/api";
+import Head from "next/head";
+
 import { format, parseISO } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
+
 import { convertDuration2TimeStr } from "../utils/convertDuration2TimeStr";
+import { usePlayer } from "../contexts/PlayerContext";
+import { api } from "../services/api";
 
 import styles from "./home.module.scss";
 
@@ -13,7 +17,6 @@ type Episode = {
   title: string;
   members: string;
   thumbnail: string;
-  //description: string;
   duration: number;
   durationAsStr: string;
   url: string;
@@ -26,13 +29,21 @@ type HomeProps = {
 };
 
 export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
+  const { playList, play } = usePlayer();
+
+  const episodeList = [...latestEpisodes, ...allEpisodes];
+
   return (
     <div className={styles.homePage}>
+      <Head>
+        <title>Home | Podcastr</title>
+      </Head>
+
       <section className={styles.latestEpisodes}>
         <h2>Últimos lançamentos</h2>
 
         <ul>
-          {latestEpisodes.map((episode) => {
+          {latestEpisodes.map((episode, index) => {
             return (
               <li key={episode.id}>
                 <Image
@@ -52,7 +63,14 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                   <span>{episode.durationAsStr}</span>
                 </div>
 
-                <button type="button">
+                <button
+                  type="button"
+                  onClick={() =>
+                    playList(episodeList, index + latestEpisodes.length)
+                  }
+                >
+                  {" "}
+                  // Tenho que fazer desse jeito
                   <img src="/play-green.svg" alt="Tocar episódio" />
                 </button>
               </li>
@@ -79,31 +97,29 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
           <tbody>
             {allEpisodes.map((ep) => {
               return (
-                <tr>
-                  <th key={ep.id}>
-                    <td style={{ width: 72 }}>
-                      <Image
-                        width={120}
-                        height={120}
-                        src={ep.thumbnail}
-                        alt={ep.title}
-                        objectFit="cover"
-                      />
-                    </td>
-                    <td>
-                      <Link href={`/episodes/${ep.id}`}>
-                        <a>{ep.title}</a>
-                      </Link>
-                    </td>
-                    <td>{ep.members}</td>
-                    <td style={{ width: 100 }}>{ep.publishedAt}</td>
-                    <td>{ep.durationAsStr}</td>
-                    <td>
-                      <button type="button">
-                        <img src="/play-green.svg" alt="Tocar episódio" />
-                      </button>
-                    </td>
-                  </th>
+                <tr key={ep.id}>
+                  <td style={{ width: 72 }}>
+                    <Image
+                      width={120}
+                      height={120}
+                      src={ep.thumbnail}
+                      alt={ep.title}
+                      objectFit="cover"
+                    />
+                  </td>
+                  <td>
+                    <Link href={`/episodes/${ep.id}`}>
+                      <a>{ep.title}</a>
+                    </Link>
+                  </td>
+                  <td>{ep.members}</td>
+                  <td style={{ width: 100 }}>{ep.publishedAt}</td>
+                  <td>{ep.durationAsStr}</td>
+                  <td>
+                    <button type="button" onClick={() => play(ep)}>
+                      <img src="/play-green.svg" alt="Tocar episódio" />
+                    </button>
+                  </td>
                 </tr>
               );
             })}
@@ -125,12 +141,16 @@ export const getStaticProps: GetStaticProps = async () => {
 
   const episodesFormated = data.map((episode) => {
     return {
-      ...episode,
+      id: episode.id,
+      title: episode.title,
+      thumbnail: episode.thumbnail,
+      members: episode.members,
       publishedAt: format(parseISO(episode.published_at), "d MMM yy", {
         locale: ptBR,
       }),
       duration: Number(episode.file.duration),
       durationAsStr: convertDuration2TimeStr(Number(episode.file.duration)),
+      url: episode.file.url,
     };
   });
 
@@ -142,6 +162,6 @@ export const getStaticProps: GetStaticProps = async () => {
       latestEpisodes,
       allEpisodes,
     },
-    revalidate: 60 * 60 * 8,
+    revalidate: 60 * 60 * 8, // 8 hours
   };
 };
