@@ -28,8 +28,8 @@
         transform: translate(-50%, -50%);
       }
 
-      &:first-child {
-        left: 0;
+      &:last-child {
+        right: 0;
         top: 50%;
         background: var(--green-500);
         transform: translate(50%, -50%);
@@ -43,11 +43,11 @@
 
   header {
     padding-bottom: 1rem;
-    border: 1px solid var(--gray-100);
+    border-bottom: 1px solid var(--gray-100);
 
     h1 {
       margin-top: 2rem;
-      margin-bottom: 1.5rem;
+      border-bottom: 1.5rem;
     }
 
     span {

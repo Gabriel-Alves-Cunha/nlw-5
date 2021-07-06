@@ -21,20 +21,20 @@
 	--purple-800: #6f48c9;
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 1180px) {
 	html {
-		font-size: 93.75%; // 15px (a partir de 16px)
+		font-size: 81.25%; // 13px (a partir de 16px)
 	}
 }
 
 @media (max-width: 720px) {
 	html {
-		font-size: 87.5%; // 14px (a partir de 16px)
+		font-size: 75%; // 12px (a partir de 16px)
 	}
 }
 
 body {
-	background: var(--gray-50)
+	background: var(--gray-50);
 }
 
 body, input, textarea, button {
@@ -58,4 +58,25 @@ h2 {
 
 button {
 	cursor: pointer;
+}
+
+// thin scrollbar
+::-webkit-scrollbar {
+  width: 4px;
+	height: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--purple-500);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--purple-800);
 }

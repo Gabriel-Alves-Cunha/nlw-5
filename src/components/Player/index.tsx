@@ -30,7 +30,7 @@ export function Player() {
   } = useContext(PlayerContext);
 
   useEffect(() => {
-    if (audioRef.current) {
+    if (!audioRef.current) {
       return;
     }
     if (isPlaying) {
@@ -67,7 +67,7 @@ export function Player() {
     <div className={styles.playerContainer}>
       <header>
         <img src="/playing.svg" alt="Tocando agora" />
-        <strong>Tocando agora {currentEpisode?.title}</strong>
+        <strong>Tocando agora:</strong>
       </header>
 
       {currentEpisode ? (
@@ -96,9 +96,9 @@ export function Player() {
                 max={currentEpisode.duration}
                 value={progress}
                 onChange={handleSeek}
-                trackStyle={{ backgroundColor: "#04d361" }}
-                railStyle={{ backgroundColor: "#9f75ff" }}
-                handleStyle={{ borderColor: "#04d361", borderWidth: 4 }}
+                trackStyle={{ backgroundColor: "#04d361", height: "0.1rem" }}
+                railStyle={{ backgroundColor: "#9f75ff", height: "0.1rem" }}
+                handleStyle={{ borderColor: "#04d361", borderWidth: 3 }}
               />
             ) : (
               <div className={styles.emptySlider} />

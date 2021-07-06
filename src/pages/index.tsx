@@ -43,9 +43,9 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
         <h2>Últimos lançamentos</h2>
 
         <ul>
-          {latestEpisodes.map((episode, index) => {
-            return (
-              <li key={episode.id}>
+          {latestEpisodes.map((episode, index) => (
+            <li key={episode.id}>
+              <div className={styles.thumbnailEpisode}>
                 <Image
                   width={192}
                   height={192}
@@ -53,29 +53,29 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                   alt={episode.title}
                   objectFit="cover"
                 />
+              </div>
 
-                <div className={styles.episodeDetails}>
-                  <Link href={`/episodes/${episode.id}`}>
-                    <a>{episode.title}</a>
-                  </Link>
-                  <p>{episode.members}</p>
-                  <span>{episode.publishedAt}</span>
-                  <span>{episode.durationAsStr}</span>
-                </div>
+              <div className={styles.episodeDetails}>
+                <Link href={`/episodes/${episode.id}`}>
+                  <a>{episode.title}</a>
+                </Link>
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    playList(episodeList, index + latestEpisodes.length)
-                  }
-                >
-                  {" "}
-                  // Tenho que fazer desse jeito
-                  <img src="/play-green.svg" alt="Tocar episódio" />
-                </button>
-              </li>
-            );
-          })}
+                <p>{episode.members}</p>
+                <span>{episode.publishedAt}</span>
+                <span>{episode.durationAsStr}</span>
+              </div>
+
+              <button
+                type="button"
+                onClick={() =>
+                  playList(episodeList, index + latestEpisodes.length)
+                }
+              >
+                // // Tenho que fazer desse jeito
+                <img src="/play-green.svg" alt="Tocar episódio" />
+              </button>
+            </li>
+          ))}
         </ul>
       </section>
 
@@ -95,10 +95,10 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
           </thead>
 
           <tbody>
-            {allEpisodes.map((ep) => {
-              return (
-                <tr key={ep.id}>
-                  <td style={{ width: 72 }}>
+            {allEpisodes.map((ep) => (
+              <tr key={ep.id}>
+                <td>
+                  <div className={styles.imageOnTable}>
                     <Image
                       width={120}
                       height={120}
@@ -106,23 +106,23 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                       alt={ep.title}
                       objectFit="cover"
                     />
-                  </td>
-                  <td>
-                    <Link href={`/episodes/${ep.id}`}>
-                      <a>{ep.title}</a>
-                    </Link>
-                  </td>
-                  <td>{ep.members}</td>
-                  <td style={{ width: 100 }}>{ep.publishedAt}</td>
-                  <td>{ep.durationAsStr}</td>
-                  <td>
-                    <button type="button" onClick={() => play(ep)}>
-                      <img src="/play-green.svg" alt="Tocar episódio" />
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
+                  </div>
+                </td>
+                <td>
+                  <Link href={`/episodes/${ep.id}`}>
+                    <a>{ep.title}</a>
+                  </Link>
+                </td>
+                <td>{ep.members}</td>
+                <td style={{ width: 100 }}>{ep.publishedAt}</td>
+                <td>{ep.durationAsStr}</td>
+                <td>
+                  <button type="button" onClick={() => play(ep)}>
+                    <img src="/play-green.svg" alt="Tocar episódio" />
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </section>

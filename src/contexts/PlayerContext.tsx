@@ -34,7 +34,7 @@ type PlayerContextProviderProps = {
 export const PlayerContext = createContext({} as PlayerContextData); // Formato dos dados que vai ser iniciado
 
 export function PlayerContextProvider({
-  children,
+  children
 }: PlayerContextProviderProps) {
   const [episodeList, setEpisodeList] = useState([]);
   const [currentEpisodeIndex, setCurrentEpisodeIndex] = useState(0);
